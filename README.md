@@ -85,7 +85,18 @@ public health interventions (From Abstract, [Klepac et al.](https://www.medrxiv.
 
 6. [Social contact data for UK](https://zenodo.org/record/1409507#.XpZj2W57l24)
 
-## 5. R Library for SIM
+## 5. Google Social Mobility Reports
+
+Google AI and Google Health have made public their mobility data gathered across 140 countries. Specifically, for UK we have at local authority level information for the following ([Github](https://github.com/datasciencecampus/google-mobility-reports-data))
+
+1. Grocery & pharmacy
+2. Parks
+3. Residential
+4. Retail & recreation
+5. Transit stations
+6. Workplace
+
+## 6. R Library for SIM
 
 [socialmixr](https://rdrr.io/cran/socialmixr/f/vignettes/introduction.Rmd) is an R package to derive social mixing matrices from survey data. These are particularly useful for age-structured infectious disease models. For background on age-specific mixing matrices and what data inform them, see, for example, the paper on by [Mossong et al.](https://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.0050074)
 
