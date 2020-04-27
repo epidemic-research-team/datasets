@@ -81,11 +81,13 @@ public health interventions (From Abstract, [Klepac et al.](https://www.medrxiv.
 
 4. [Wagner](https://www.cc.gatech.edu/~alanwags/pubs/hri196-wagner.pdf) This   paper   explores   the   use   of   an   outcome   matrix   as   a computational  representation  of  social  interaction suitable  for implementation  on  a  robot.  An  outcome  matrix  expresses  the reward  afforded  to  each  interacting  individual  with  respect  to pairs  of  potential  behaviors.  We  detail  the  use  of the  outcome matrix as a representation of interaction in social psychology and game theory, discuss the need for modeling the robot’s interactive partner, and contribute an algorithm for creating outcome matrices from perceptual information. Experimental results explore the use of  the  algorithm  with  different  types  of  partners  and  in  different environments (From Abstract).
 
-5. [POLYMOD](http://www.socialcontactdata.org/)
+5. [POLYMOD](http://www.socialcontactdata.org/) The survey has been organised and presented by Mossong et al. in 2007 - 2008 period. Is the standard social matrix that is being used for infectious deceases. There is a R Shiny version where the user can easily download the relevant data by gender and other characteristics ([RShiny](https://lwillem.shinyapps.io/socrates_rshiny/))
 
 6. [Social contact data for UK](https://zenodo.org/record/1409507#.XpZj2W57l24)
 
-## 5. Google Social Mobility Reports
+## 5. Mobility Reports
+
+### Google AI
 
 Google AI and Google Health have made public their mobility data gathered across 140 countries. Specifically, for UK we have at local authority level information for the following ([Github](https://github.com/datasciencecampus/google-mobility-reports-data))
 
@@ -95,6 +97,12 @@ Google AI and Google Health have made public their mobility data gathered across
 4. Retail & recreation
 5. Transit stations
 6. Workplace
+
+### Apple Mobility Reports
+
+Apple has also made public the mobility reports (on a higher level than Google though) based on iPhone users.
+
+Data source is the special Apple COVID [website](https://www.apple.com/covid19/mobility)
 
 ## 6. R Library for SIM
 
