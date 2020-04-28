@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.12.9)  23 APR 2020 14:18
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.12.9)  28 APR 2020 09:35
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -197,7 +197,13 @@ LaTeX Warning: No \author given.
 [1
 
 {/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-<./Figures/COVIDb.png, id=11, 963.2788pt x 541.8644pt>
+
+LaTeX Warning: Reference `fig:model' on page 2 undefined on input line 20.
+
+
+LaTeX Warning: Reference `fig:model' on page 2 undefined on input line 20.
+
+<./Figures/COVIDb.png, id=13, 963.2788pt x 541.8644pt>
 File: ./Figures/COVIDb.png Graphic file (type png)
 
 <use ./Figures/COVIDb.png>
@@ -212,32 +218,44 @@ Overfull \hbox (41.91838pt too wide) in paragraph at lines 39--39
 [] 
  []
 
-[2] [3 <./Figures/COVIDb.png>] (./simple.bbl [4]) [5] (./simple.aux) ) 
+[2] [3 <./Figures/COVIDb.png>] [4]
+Overfull \hbox (23.96375pt too wide) in paragraph at lines 121--122
+\OT1/cmr/m/n/12 97\OML/cmm/m/it/12 ; \OT1/cmr/m/n/12 904$ con-tacts grouped by 
+age, gen-der, type of con-tact (phys-i-cal/conversational),
+ []
+
+[5] (./simple.bbl [6]) [7] (./simple.aux)
+
+LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+ ) 
 Here is how much of TeX's memory you used:
  2125 strings out of 492995
  28896 string characters out of 6132704
- 96740 words of memory out of 5000000
+ 97732 words of memory out of 5000000
  5665 multiletter control sequences out of 15000+600000
  10200 words of font info for 37 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  39i,9n,25p,1571b,229s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/loc
-al/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/loca
-l/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local
-/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/
-texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/te
-xlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texl
-ive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texliv
-e/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/
-2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/201
-7/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2017/t
-exmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2017/te
-xmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2017/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb>
-Output written on simple.pdf (5 pages, 366702 bytes).
+</usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb
+></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb>
+</usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb><
+/usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></u
+sr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr
+/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/l
+ocal/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/loc
+al/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/
+texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/tex
+live/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texl
+ive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texliv
+e/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb>
+Output written on simple.pdf (7 pages, 378990 bytes).
 PDF statistics:
- 69 PDF objects out of 1000 (max. 8388607)
- 48 compressed objects within 1 object stream
+ 77 PDF objects out of 1000 (max. 8388607)
+ 54 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  6 words of extra memory for PDF output out of 10000 (max. 10000000)
 

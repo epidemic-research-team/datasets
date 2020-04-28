@@ -11,11 +11,11 @@
 \begin{document}
 \maketitle
 
-Standard epidemic models, such as SIR, SIS and their extensions  SIRS, MSEIRS, SEIR are well established mathematical methods that simulate the spread of an infectious decease \cite{keeling2008modeling, ma2009mathematical, li2018introduction}. One limitation of these models is that they base their prediction on the a-priori assumption that the rate of contact in a population is constant across environments and age groups. As a result, these methods neglect the vital component of how populations interact. Therefore, researchers who solely rely on the SIR/SIS family of models often formulate contact rates ($\sigma$) and reproduction numbers ($R_{0}$) based on make non-data driven hypotheses. As a reminder, $R_{0}$ is the "\textit{The threshold for many epidemiology models is the basic reproduction number $R_{0}$, which is defined as the average number of secondary infections produced when one infected individual is introduced into a host population where everyone is susceptible}" \cite[p.21]{ma2009mathematical}. In general, $R_{0}>\sigma$ but in many models $R_{0}=\sigma$. 
+Standard epidemic models, such as SIR, SIS and their extensions  SIRS, MSEIRS, SEIR are well established mathematical methods that simulate the spread of an infectious decease \cite{keeling2008modeling, ma2009mathematical, li2018introduction}. One limitation of these models is that they base their prediction on the a-priori assumption that the rate of contact in a population is constant across environments and age groups. As a result, these methods neglect the vital component of how populations interact. Therefore, researchers who solely rely on the SIR/SIS family of models often formulate contact rates ($\sigma$) and reproduction numbers ($\mathcal{R}_{0} $) based on make non-data driven hypotheses. As a reminder, $\mathcal{R}_{0} $ is the "\textit{The threshold for many epidemiology models is the basic reproduction number $\mathcal{R}_{0}$, which is defined as the average number of secondary infections produced when one infected individual is introduced into a host population where everyone is susceptible}" \cite[p.21]{ma2009mathematical}. In general, $\mathcal{R}_{0} >\sigma$ but in many models $\mathcal{R}_{0} =\sigma$. 
 
-Social Mixing Matrices (SMMs) are considered important tools to establish an as much accurate as possible $R_{0}$ and $\sigma$ and therefore in bulding effective defence against respiratory pathogens. They capture social distancing patterns, based on direct observations and surveys, and as a result they provide crucial information to both scientists and public officials on how a directly transmitted infectious decease is spreading. Because of the granularity of the data that SMMs offer their use has the potential to increase model robustness and prediction accuracy compared to models that rely solely on indirect data \cite{Mossong:2008, Baguelin:2013}. 
+Social Mixing Matrices (SMMs) are considered important tools to establish an as much accurate as possible $\mathcal{R_{0}}$ and $\sigma$ and therefore in bulding effective defence against respiratory pathogens. They capture social distancing patterns, based on direct observations and surveys, and as a result they provide crucial information to both scientists and public officials on how a directly transmitted infectious decease is spreading. Because of the granularity of the data that SMMs offer their use has the potential to increase model robustness and prediction accuracy compared to models that rely solely on indirect data \cite{Mossong:2008, Baguelin:2013}. 
 
-On their study, \cite{Diekmann:2010} explored the construction of the called next generation matrices (NGMs). NGMs are a vital part of the SMMs construction and utilisation process. Many papers that have used SMMs, one way or the other, they had to transform their initial population interaction matrix to be NGM compliant in order to adequately compute the integral $R_{0}$ and $\sigma$ \cite{Mossong:2008, Fumanelli:2012, Klepac2020}. In other words, NGMs show the number of novel infections from each category (age groups, gender groups, etc) in consecutive generations \cite[p.874]{Diekmann:2010}. From the NGM, we can map the $R_{0}$ to the dominant eigenvalue of the matrix. The ODE models that are used in epidemiology are linearised and form a Jacobian matrix \cite[Section 2.1.2]{keeling2008modeling}, then \cite{Diekmann:2010} showed how to decompose this matrix into a transition component $\Sigma$ (change in state) and a transmission part $T$ (new infections). 
+On their study, \cite{Diekmann:2010} explored the construction of the called next generation matrices (NGMs). NGMs are a vital part of the SMMs construction and utilisation process. Many papers that have used SMMs, one way or the other, they had to transform their initial population interaction matrix to be NGM compliant in order to adequately compute the integral $\mathcal{R}_{0} $ and $\sigma$ \cite{Mossong:2008, Fumanelli:2012, Klepac2020}. In other words, NGMs show the number of novel infections from each category (age groups, gender groups, etc) in consecutive generations \cite[p.874]{Diekmann:2010}. From the NGM, we can map the $\mathcal{R}_{0}$ to the dominant eigenvalue of the matrix. The ODE models that are used in epidemiology are linearised and form a Jacobian matrix \cite[Section 2.1.2]{keeling2008modeling}, then \cite{Diekmann:2010} showed how to decompose this matrix into a transition component $\Sigma$ (change in state) and a transmission part $T$ (new infections). 
 
 To illustrate the work of \cite{Diekmann:2010}, we will use the epidemiological model from \cite{Gareth:2013}. The model will be adapted to COVID-19 cases and to include social mixing matrix data instead of the sexual contact matrix that the authors used. The compartmental transmission model has a form as shown in Figure \ref{fig:model} \cite[p.5]{Gareth:2013}. From the Figure \ref{fig:model}, the studied population is divided into the following non-overlapping compartments: $S$ is for individuals who are at risk of Covid-19 infection, $I$ is for infected individuals, $G$ is for infected who developed serious symptoms and required ICU admission, $P$ is those who have recovered, and are seropositive and immune, $N$ is for individuals who are recovered, immune but seronegative. The indices $g$, $a$ and $s$ indicate that every compartment is stratified by gender, age and level of social activity. Movements between compartments are occurring at per capita rates specified by the following parameters: $\lambda$ is the \textbf{force of infection} dependent on the proportion of individuals in $I$, \textbf{PSC} is the probability of becoming seropositive, \textbf{WIP} is the Covid-19 incubation period, \textbf{DAI} is the duration of asymptomatic (i.e. without Covid-19) infection symptoms, \textbf{DWT} is the duration of treatment for Covid-19, and \textbf{DI} is the duration of immunity. Subscripts denote stratification of parameters: for example, \textbf{DWT}$_{g}$ means that in our model this parameter is gender-dependent.
 
@@ -38,15 +38,91 @@ The system of ODEs is then formulated as follow
 \dot{N}_{g,s,a}  & =  (1-PSC_g)(I_{g,s,a}/DAI_g + G_{g,s,a}/DWT_g) - N_{g,s,a}/DI_g + \frac{1}{r}N_{g,s,a-1}-\frac{1}{r}N_{g,s,a} \\
 \end{align*}
 
-by following the steps of \cite[p.875]{Diekmann:2010}, the stochastic compartmental system has in total 5 states; of which one is infected state $I$ and three uninfected states $S$, $P$ and $N$. The total population remains constant by adding an ageing term in the susceptible compartment, $\frac{1}{R}\sum(\dots)\times\delta\pi$ \cite[p.7]{Gareth:2013}. The ODE $I$ is the one that describes the production of new infected
+by following the steps of \cite[p.875]{Diekmann:2010}, the stochastic compartmental system has in total 5 states, $T_{total \quad population} = S + I + P + N + G$; of which two are infected states $I$ and $G$ and three uninfected states $S$, $P$ and $N$. The total population remains constant by adding an ageing term in the susceptible compartment, $\frac{1}{R}\sum(\dots)\times\delta\pi$ \cite[p.7]{Gareth:2013}. The ODE $I$ is the state that contains the rate of infection term $\lambda$. The model is high dimensional since it involves the non-linear ODEs parameters that need to be calibrated ($\lambda, WIP, DAI, DWT, DI$). At the infection free state, the total population $S=T{total \quad population}$. The system is called by \cite{Diekmann:2010} as a \textit{linearised infection sub-subsystem}. 
 
-A landmark study SMM based study was POLYMOD \cite{Mossong:2008} that includes $n=7,290$ participants from 8 European countries between years 2005-2006. This is the first study of such inter-state scale and since then it has been widely used amongst publications in the field. POLYMOD, contains information for $97,904$ contacts grouped by age, gender, type of contact (physical/conversational), place and frequency. The study expanded the pool of potential information that researchers for epidemiological deceases could access.
+Let $\dot{x} = (I_{g,s,a})^{T}$, and we want to decompose the system to  have the form
 
-One limitation with the POLYMOD study is the population bias that exhibits on children and young adult ages. The reason is that the focus of the study has been deliberately on these age groups as the infectious deceases that the authors studied were most likely to be transmitted through young ages. For example, 38\% of the participants are under 20 years old of age and 12\% were over 60 years old. At the time of survey, the European average for these 8 countries for 20 y and under was 17\% and the same average for 60 y and over was 21\%. As a reference, the EU average for 20 y and under was 16\% and 23\% respectively. There is also a small change over the years, in 2018 (the same year as the BBC survey in UK) the population in the 8 countries for 20 y and under was 15\% and for 60y and over was 25\%. The inclusion of developing Eastern European countries has not managed to reverse the ageing population that developed countries suffer from. The subsequent rapid development of the new European Union countries has affected them with the same problem of an ageing population \footnote{Information sourced from Eurostat data [demo\_pjanbroad]}.
+\begin{equation}
+\dot{x} = (T + \Sigma)x
+\end{equation} 
 
-In their results, the authors showed some interesting outcomes. First, using countries as dummy variables do seem to make a difference in the social mixing matrix. For instance, German participants showed per daily average $\mu=8$ fewer number of contacts compared to their Italian counterparts $\mu=20$. 
+where matrix $T$ corresponds to transmissions and matrix $\Sigma$ to transitions. 
 
-Work and transport involve the fewer average number of physical contact; it might look counter-intuitive for the latter but transport could potentially entail 
+In their paper, \cite[p.875]{Diekmann:2010} use a SEIR model with 2 exposed categories as an example.
+
+\begin{align*}
+\dot{S} & =  \mu N - \beta\frac{SI}{N} + \mu S \\
+\dot{E}_{1}  & =  \rho \beta \frac{SI}{N} - (\nu_{1} + \mu)\dot{E}_{1} \\
+\dot{E}_{2}  & =  (1 - \rho) \beta \frac{SI}{N} - (\nu_{2} + \mu)\dot{E}_{2}\\
+\dot{I}  & =  \nu_{1} \dot{E}_{1}  + \\nu_{2} \dot{E}_{2}  - (\gamma + \mu) I\
+\dot{R}  & =  \gamma I - \mu R\\
+\end{align*}
+
+According to \cite{Diekmann:2010}, the role of $T$ and $\Sigma$ is similar to the sufficient statistics, as all information that is required is included in the decomposition. For the transition matrix $T$, we create a matrix with infected states, using indices $i, j\in {1, 2, 3}$ and the record $T_{ij}$ is the rate of infection term; individuals from state $j$ infects individuals in $i$. If the element in $T_{ij}$ is 0, then there is no chance of transmission.  Therefore, 
+
+
+
+\begin{equation*}
+T=
+\begin{pmatrix}
+0 & 0 & \rho \beta\\
+0 & 0 & c (1-\rho)\beta\\
+0 & 0 & 0
+\end{pmatrix}
+\end{equation*}
+
+and 
+
+\begin{equation*}
+\Sigma=
+\begin{pmatrix}
+-(\nu_{1}+\mu) & 0 & 0\\
+0 & -(\nu_{2}+\mu) & 0\\
+\nu_{1} &  \nu_{2}& -(\gamma + \mu)
+\end{pmatrix}
+\end{equation*}
+
+hence we solve for the NGM with large domain ($K_{L}$)
+
+\begin{equation*}
+K_{L} = -T\Sigma^{-1} = 
+\begin{pmatrix}
+0 & 0 & \rho \beta\\
+0 & 0 & c (1-\rho)\beta\\
+0 & 0 & 0
+\end{pmatrix}
+\times
+\begin{pmatrix}
+-(\nu_{1}+\mu) & 0 & 0\\
+0 & -(\nu_{2}+\mu) & 0\\
+\nu_{1} &  \nu_{2}& -(\gamma + \mu)
+\end{pmatrix}
+\end{equation*}
+
+the dominant eigenvalue of this matrix $K_{L}$ is the $\mathcal{R_{0}}$
+
+
+\begin{equation}
+\mathcal{R}_{0} = \bigg( \frac{\rho \nu_{1}}{\nu_{1} + \mu} + \frac{(1-\rho) \nu_{2}}{\nu_{2} + \mu}  \bigg) \frac{\beta}{(\gamma + \mu)}
+\end{equation}
+
+or similarly, by using the equation of NGM
+
+\begin{equation}
+K=E^{T}K_{L}E=-E^{T}T\Sigma^{-1}E
+\end{equation}
+
+with $E$ being a matrix that its columns contain unit vectors the non-zero rows of matrix $T$, which leads
+
+\begin{equation}
+\mathcal{R}_{0}  = \rho (K) = \frac{1}{2} \bigg( trace(K) + \sqrt{trace(K)^{2} + 4det(K)} \bigg)
+\end{equation}
+
+A landmark SMM based study was POLYMOD \cite{Mossong:2008} that includes $n=7,290$ participants from 8 European countries between years 2005-2006. This is the first study of such inter-state scale and since then it has been widely used amongst publications in the field. POLYMOD, contains information for $97,904$ contacts grouped by age, gender, type of contact (physical/conversational), place and frequency. The study expanded the pool of potential information that researchers for epidemiological deceases could access. In their results, the authors showed some interesting cultural outcomes. For example, using countries as dummy variables do seem to make a difference in the social mixing matrix. For instance, German participants showed per daily average $\mu=8$ fewer number of contacts compared to their Italian counterparts $\mu=20$. 
+
+One limitation with the POLYMOD study is the population bias that exhibits on children and young adult ages as the focus of the study has been set deliberately on these age groups. The reason is that the infectious decease that the authors studied (influenza) were most likely to be transmitted through young ages. For example, 38\% of the participants are under 20 years old of age and 12\% were over 60 years old. At the time of survey, the European average for these 8 countries for 20 y and under was 17\% and the same average for 60 y and over was 21\%. As a reference, the EU average for 20 y and under was 16\% and 23\% respectively. There is also a small change over the years, in 2018 (the same year as the BBC Pandemic survey in UK) the population in the 8 countries for 20 y and under was 15\% and for 60y and over was 25\%. The inclusion of developing Eastern European countries has not managed to reverse the ageing population that developed countries suffer from. The subsequent rapid development of the new European Union countries has affected them with the same problem of an ageing population \footnote{Information sourced from Eurostat data [demo\_pjanbroad]}. Another potential issue with the POLYMOD data is the time that has passed since the study was contacted. Since then, social behaviours and patterns might have changed dramatically. 
+
+Considering the aforementioned limitations that the POLYMOD data suffer from, \cite{Klepac2020}, with the assistance of BBC Pandemic project, conducted a large scale population and social behaviour survey in UK, 2017-2018. The study included $n=38,000$ volunteers between 13-90+ by contact type (physical or conversational) and by social environment (work, home, etc) . The survey, groups the individuals in 5 year age segments, up to 75+ for whom there is a single category. To construct the social mixing \cite{Klepac2020} start from the \textit{raw matrix}.
 
 \bibliographystyle{abbrv}
 \bibliography{simple}
