@@ -4,9 +4,11 @@
 \usepackage{graphicx}
 \graphicspath{ {./Figures/} }
 \usepackage{amsmath}
+\usepackage{hyperref}
 
 \title{Social Mixing Matrix Literature Review and an Intuitive Approach for the $\mathcal{R}_{0}$}
 
+\author{GitHub: \url{https://github.com/epidemic-research-team/}}
 
 \begin{document}
 \maketitle
@@ -29,51 +31,34 @@ Considering the aforementioned limitations that the POLYMOD data suffer from, \c
 
 The BBC Pandemic survey from \cite{Klepac2020} covers most of the limitations that POLYMOD study \cite{Diekmann:2010} has but BBC Pandemic has its own drawbacks too. For instance, because the BBC app allowed users from 13 y and more the survey does not contain information for ages below 13 y. For the study of infectious deceases that are transmitted more easily amongst children there is a gap in the survey. There is also an element of population bias considering the fact that the sample has not been selected randomly from the overall geographical population. It might be that population from big cities dominate the study. Also, the survey is not gender specific, whereas POLYMOD is. 
 
-A study on the magnitude of \cite{Klepac2020} is comprehensive and extensive but also costly, time consuming and logistically complicated. As alternative, researchers used statistical methods to map the social mixing characteristics from the 8 countries of \cite{Diekmann:2010} into other geographic areas and from there to infer results. These methods, could potentially by utilised in order to expand research on local authority level in UK or to other countries. For instance, \cite{Fumanelli:2012} used census data from 28 European countries (household, work, education etc) in order to construct synthetic NGM. In general, they assume a uniform distribution to depict the contacts amongst individuals and then use empirical evidence from past research as a prior to modify these contact rates according to the social setting (work, household, school, etc) before they construct the NGM matrix.
+A study on the magnitude of \cite{Klepac2020} is comprehensive and extensive but also costly, time consuming and logistically complicated. As alternative, researchers used statistical methods to map the social mixing characteristics from the 8 countries of \cite{Diekmann:2010} into other geographic areas and from there to infer results. These methods, could potentially by utilised in order to expand research on local authority level in UK or to other countries. For instance, \cite{Fumanelli:2012} used census data from 28 European countries (household, work, education etc) in order to construct synthetic NGM. In general, they assume a uniform distribution to depict the contacts amongst individuals and then use empirical evidence from past research as a prior to modify these contact rates according to the social setting (work, household, school, etc) before they construct the average frequency of contacts matrix $M$ that leads to the NGM matrix.
+
+Other papers that have evaluated and expanded the POLYMOD survey using statistical methods include \cite{Kiesha:2017}, where the authors sourced socio-demographic data from 152 countries in order to project the POLYMOD from 8 to 144 countries, using a hierarchical Bayesian model and MCMC to sample the posterior parameters.
 
 \section{Computation of $\mathcal{R}_{0}$ from NGM}
 \label{sec:2}
 
-To illustrate the work of \cite{Diekmann:2010}, we will use the epidemiological model from \cite{Gareth:2013}. The model will be adapted to COVID-19 cases and to include social mixing matrix data instead of the sexual contact matrix that the authors used. The compartmental transmission model has a form as shown in Figure \ref{fig:model} \cite[p.5]{Gareth:2013}. From the Figure \ref{fig:model}, the studied population is divided into the following non-overlapping compartments: $S$ is for individuals who are at risk of Covid-19 infection, $I$ is for infected individuals, $G$ is for infected who developed serious symptoms and required ICU admission, $P$ is those who have recovered, and are seropositive and immune, $N$ is for individuals who are recovered, immune but seronegative. The indices $g$, $a$ and $s$ indicate that every compartment is stratified by gender, age and level of social activity. Movements between compartments are occurring at per capita rates specified by the following parameters: $\lambda$ is the \textbf{force of infection} dependent on the proportion of individuals in $I$, \textbf{PSC} is the probability of becoming seropositive, \textbf{WIP} is the Covid-19 incubation period, \textbf{DAI} is the duration of asymptomatic (i.e. without Covid-19) infection symptoms, \textbf{DWT} is the duration of treatment for Covid-19, and \textbf{DI} is the duration of immunity. Subscripts denote stratification of parameters: for example, \textbf{DWT}$_{g}$ means that in our model this parameter is gender-dependent.
+\subsection{Next Generation Matrices: SEIR}
+\label{sub:2.1}
 
-\begin{figure}[h!]
-\centering
-\includegraphics[width=1\textwidth]{COVIDb}
-\caption{A compartmental Covid-19 transmission model.}
-\label{fig:model}
-\end{figure}
-
-The system of ODEs is then formulated as follow
+In their paper, \cite[p.875]{Diekmann:2010} use a SEIR model with 2 exposed categories as an example ($E_{1}, E_{2}$).
 
 \begin{align*}
-\dot{S}_{g,s,a} & =  -\lambda_{g,s,a}(t)S_{g,s,a} + (P_{g,s,a} + N_{g,s,a})/DI_g + \frac{1}{r}S_{g,s,a-1} - \frac{1}{r}S_{g,s,a} + \\
-& \quad \frac{1}{R}\sum_{g,s}(S_{g,s,20} + I_{g,s,20} + G_{g,s,20} + P_{g,s,20} + N_{g,s,20}) \times \\
-& \quad \delta_1(a)(\pi_1\delta_1(s) + \pi_2\delta_2(s) + \pi_3\delta_3(s) + \pi_4\delta_4(s)) \\ 
-\dot{I}_{g,s,a}  & =  \lambda_{g,s,a}(t)S_{g,s,a} - (1/WIP_g + 1/DAI_g)I_{g,s,a} + \frac{1}{r}I_{g,s,a-1}-\frac{1}{r}I_{g,s,a} \\
-\dot{G}_{g,s,a}  & =  I_{g,s,a}/WIP_g - G_{g,s,a}/DWT_g + \frac{1}{r}G_{g,s,a-1} - \frac{1}{r}G_{g,s,a} \\ 
-\dot{P}_{g,s,a}  & =  PSC_g(I_{g,s,a}/DAI_g + G_{g,s,a}/DWT_g) - P_{g,s,a}/DI_g + \frac{1}{r}P_{g,s,a-1} - \frac{1}{r}P_{g,s,a} \\
-\dot{N}_{g,s,a}  & =  (1-PSC_g)(I_{g,s,a}/DAI_g + G_{g,s,a}/DWT_g) - N_{g,s,a}/DI_g + \frac{1}{r}N_{g,s,a-1}-\frac{1}{r}N_{g,s,a} \\
+\dot{S} & =  \mu N - \beta\frac{SI}{N} + \mu S \\
+\dot{E}_{1}  & =  \rho \beta \frac{SI}{N} - (\nu_{1} + \mu)\dot{E}_{1} \\
+\dot{E}_{2}  & =  (1 - \rho) \beta \frac{SI}{N} - (\nu_{2} + \mu)\dot{E}_{2}\\
+\dot{I}  & =  \nu_{1} \dot{E}_{1}  + \\nu_{2} \dot{E}_{2}  - (\gamma + \mu) I \\
+\dot{R}  & =  \gamma I - \mu R\\
 \end{align*}
 
-by following the steps of \cite[p.875]{Diekmann:2010}, the stochastic compartmental system has in total 5 states, $T_{total \quad population} = S + I + P + N + G$; of which two are infected states $I$ and $G$ and three uninfected states $S$, $P$ and $N$. The total population remains constant by adding an ageing term in the susceptible compartment, $\frac{1}{R}\sum(\dots)\times\delta\pi$ \cite[p.7]{Gareth:2013}. The ODE $I$ is the state that contains the rate of infection term $\lambda$. The model is high dimensional since it involves the non-linear ODEs parameters that need to be calibrated ($\lambda, WIP, DAI, DWT, DI$). At the infection free state, the total population $S=T{total \quad population}$. The system is called by \cite{Diekmann:2010} as a \textit{linearised infection sub-subsystem}. 
-
-Let $\dot{x} = (I_{g,s,a})^{T}$, and we want to decompose the system to  have the form
+where $\mu$ per capita birth and death rates, $\beta$ the transmission rate, $\nu_{i}\in\{1, 2\}$ the rates of leaving the respective latency states $E_{i}$, $\gamma$ the rate of leaving the infection state and $N=S + E_{1} + E_{2} + I + R$.
+Let $\dot{x} = (E_{1}, E_{2}, I)^{T}$, and we want to decompose the system to have the form
 
 \begin{equation}
 \dot{x} = (T + \Sigma)x
 \end{equation} 
 
 where matrix $T$ corresponds to transmissions and matrix $\Sigma$ to transitions. 
-
-In their paper, \cite[p.875]{Diekmann:2010} use a SEIR model with 2 exposed categories as an example.
-
-\begin{align*}
-\dot{S} & =  \mu N - \beta\frac{SI}{N} + \mu S \\
-\dot{E}_{1}  & =  \rho \beta \frac{SI}{N} - (\nu_{1} + \mu)\dot{E}_{1} \\
-\dot{E}_{2}  & =  (1 - \rho) \beta \frac{SI}{N} - (\nu_{2} + \mu)\dot{E}_{2}\\
-\dot{I}  & =  \nu_{1} \dot{E}_{1}  + \\nu_{2} \dot{E}_{2}  - (\gamma + \mu) I\
-\dot{R}  & =  \gamma I - \mu R\\
-\end{align*}
 
 According to \cite{Diekmann:2010}, the role of $T$ and $\Sigma$ is similar to the sufficient statistics, as all information that is required is included in the decomposition. For the transition matrix $T$, we create a matrix with infected states, using indices $i, j\in {1, 2, 3}$ and the record $T_{ij}$ is the rate of infection term; individuals from state $j$ infects individuals in $i$. If the element in $T_{ij}$ is 0, then there is no chance of transmission.  Therefore, 
 
@@ -116,7 +101,6 @@ K_{L} = -T\Sigma^{-1} =
 
 the dominant eigenvalue of this matrix $K_{L}$ is the $\mathcal{R_{0}}$
 
-
 \begin{equation}
 \mathcal{R}_{0} = \bigg( \frac{\rho \nu_{1}}{\nu_{1} + \mu} + \frac{(1-\rho) \nu_{2}}{\nu_{2} + \mu}  \bigg) \frac{\beta}{(\gamma + \mu)}
 \end{equation}
@@ -134,13 +118,88 @@ with $E$ being a matrix that its columns contain unit vectors the non-zero rows 
 \label{eq:8}
 \end{equation}
 
+\subsection{Next Generation Matrices: BBC Pandemic Survey}
+\label{sub:2.2}
+
 The NGM of \cite{Diekmann:2010} can be linked with \cite{Klepac2020} matrix $C$ by 
 
 \begin{equation}
 NGM  = \frac{\mathcal{R}_{0}}{\rho(C)} C
 \end{equation}
 
-Analogous to the \ref{eq:8}, the $\rho(C)$ is the largest eigenvalue of $C$. As in PCA, the eigenvector associated with $\rho(C)$ shows which age group dominates in the social interactions (explain more the overall data variance). 
+Analogous to the \ref{eq:8}, the $\rho(C)$ is the largest eigenvalue of $C$. As in PCA, the eigenvector associated with $\rho(C)$ shows which age group dominates in the social interactions and explain more the overall data variance. Therefore, following \cite{Diekmann:2010} examples we find the NGM and we already have $\rho(C)$ and $C$ and we extract $\mathcal{R}_{0}$.
+
+\begin{equation}
+\mathcal{R}_{0} = NGM \times C \rho(C)^{-1}
+\label{eq:9}
+\end{equation}
+
+\subsection{Next Generation Matrices: SIR}
+\label{sub:2.3}
+
+We saw in sub-Section \ref{sub:2.1} how to use \cite{Diekmann:2010} method to compute the NGM and subsequently the $\mathcal{R}_{0}$. Next, \cite[p.4]{Fumanelli:2012} provided an example of how to link \cite{Diekmann:2010} NGM method to a SIR model. Specifically, let the force of infection be $\lambda_{i}$ of a SIR model to be a linear combination of the average frequency matrix $M_{ij}$, where it shows the frequency of contacts between age groups $i$ and age groups $j$, and a  transmissibility coefficient $\beta_{i}$, which accounts the probability of infenction per contact. The matrix $M_{ij}$ is similar to BBC Pandemic \cite{Klepac2020} matrix $C_{ij}$ ($C$ is a population biased $M$, see sub-Section \ref{sub:2.2}). 
+
+The equations of the SIR model are
+
+\begin{align*}
+\dot{S} & =  \mu N - \beta M\frac{SI}{N} + \mu S\\
+\dot{I}  & =  \beta M\frac{SI}{N} - (\gamma + \mu) I  \\
+\dot{R}  & =  \gamma I - \mu R
+\end{align*}
+
+unlike the examples in \cite{Diekmann:2010}, the authors do not use a population constant; nevertheless, we add them for consistency reasons, $\mu$. Then, we calculate the $\mathcal{R}_{0}$ as the spectral radius of the NGM 
+
+\begin{equation}
+\mathcal{R}_{0} = \rho(\beta\gamma^{-1}M)
+\end{equation}
+
+this is slightly different from \cite{Klepac2020} approach to compute $\mathcal{R}_{0}$ (Equation \ref{eq:9}). 
+
+\subsection{Next Generation Matrices: SIR-COVID}
+\label{sub:2.4}
+
+The aim of this research is to employ the work of \cite{Diekmann:2010} and \cite{Fumanelli:2012} in computing the $\mathcal{R}_{0}$ in the epidemiological model from \cite{Gareth:2013}. The model will be adapted to COVID-19 cases and to include social mixing matrix data instead of the sexual contact matrix that the authors used. The compartmental transmission model has a form as shown in Figure \ref{fig:model} \cite[p.5]{Gareth:2013}. From the Figure \ref{fig:model}, the surveyed population is divided into the following non-overlapping compartments: $S$ is for individuals who are at risk of Covid-19 infection, $I$ is for infected individuals, $G$ is for infected who developed serious symptoms and required ICU admission, $P$ is those who have recovered, and are seropositive and immune, $N$ is for individuals who are recovered, immune but seronegative. The indices $g$, $a$ and $s$ indicate that every compartment is stratified by gender, age and level of social activity. Movements between compartments are occurring at per capita rates specified by the following parameters: $\lambda$ is the \textbf{force of infection} dependent on the proportion of individuals in $I$, \textbf{PSC} is the probability of becoming seropositive, \textbf{WIP} is the Covid-19 incubation period, \textbf{DAI} is the duration of asymptomatic (i.e. without Covid-19) infection symptoms, \textbf{DWT} is the duration of treatment for Covid-19, and \textbf{DI} is the duration of immunity. Subscripts denote stratification of parameters: for example, \textbf{DWT}$_{g}$ means that in our model this parameter is gender-dependent.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=1\textwidth]{COVIDb}
+\caption{A compartmental Covid-19 transmission model.}
+\label{fig:model}
+\end{figure}
+
+The system of ODEs is then formulated as follow
+
+\begin{align*}
+\dot{S}_{g,s,a} & =  -\lambda_{g,s,a}(t)S_{g,s,a} + (P_{g,s,a} + N_{g,s,a})/DI_g + \frac{1}{r}S_{g,s,a-1} - \frac{1}{r}S_{g,s,a} + \\
+& \quad \frac{1}{R}\sum_{g,s}(S_{g,s,20} + I_{g,s,20} + G_{g,s,20} + P_{g,s,20} + N_{g,s,20}) \times \\
+& \quad \delta_1(a)(\pi_1\delta_1(s) + \pi_2\delta_2(s) + \pi_3\delta_3(s) + \pi_4\delta_4(s)) \\ 
+\dot{I}_{g,s,a}  & =  \lambda_{g,s,a}(t)S_{g,s,a} - (1/WIP_g + 1/DAI_g)I_{g,s,a} + \frac{1}{r}I_{g,s,a-1}-\frac{1}{r}I_{g,s,a} \\
+\dot{G}_{g,s,a}  & =  I_{g,s,a}/WIP_g - G_{g,s,a}/DWT_g + \frac{1}{r}G_{g,s,a-1} - \frac{1}{r}G_{g,s,a} \\ 
+\dot{P}_{g,s,a}  & =  PSC_g(I_{g,s,a}/DAI_g + G_{g,s,a}/DWT_g) - P_{g,s,a}/DI_g + \frac{1}{r}P_{g,s,a-1} - \frac{1}{r}P_{g,s,a} \\
+\dot{N}_{g,s,a}  & =  (1-PSC_g)(I_{g,s,a}/DAI_g + G_{g,s,a}/DWT_g) - N_{g,s,a}/DI_g + \frac{1}{r}N_{g,s,a-1}-\frac{1}{r}N_{g,s,a} \\
+\end{align*}
+
+the stochastic compartmental system has in total 5 states, $T_{total \quad population} = S + I + P + N + G$; of which two are infected states $I$ and $G$ and three uninfected states $S$, $P$ and $N$. The total population remains constant by adding an ageing term in the susceptible compartment, $\frac{1}{R}\sum(\dots)\times\delta\pi$ \cite[p.7]{Gareth:2013}. The ODE $I$ is the state that contains the rate of infection term $\lambda$. The model is high dimensional since it involves the non-linear ODEs parameters that need to be calibrated ($\lambda, WIP, DAI, DWT, DI$). At the infection free state, the number of susceptible equals the total population $S=T{total \quad population}$. 
+
+Following \cite{Fumanelli:2012, Baguelin:2013, Klepac2020}, we will expand \cite{Gareth:2013} by including in our research a social mixing matrix (POLYMOD or BBC Pandemic) to infer the $mathcal{R}_{0}$ and also we will consider the level of intervation and the impact it has on the social mixing patterns \cite{Kiesha:2017}. The current paper from \cite{Gareth:2013} is using a sexual transmission matrix with dimensions ($2 \times 4 \times 4 \times 9 \times 9$) for $g=1|males$ and $g=2|females$, four sexual activity groups $(s\in {1, \dots ,4})$ and a 9-bracket age group. In this initial stage of the model we will simplify the social distancing matrix by using only the age group as dimensions, we will move into more complex applications later.
+
+The first step is to construct the NGM matrix \cite{Diekmann:2010} by using the survey data. In this example we will construct the NGM based on the BBC Pandemic data but following \cite{Fumanelli:2012} approach for the SIR model. From \cite{Klepac2020}, we compute the contact matrix $M$ as a linear combination of age-specific contacts by context (home $h$, work $w$, school $s$, other $r$) and type (conversational $Co$ or physical $Ph$) using the \textit{population contact matrices} $C$. We also adjust the population contact matrices by a factor, based on temporal data collected from Google AI and Apple mobility reports \footnote{All data, including COVID, social distancing matrices, mobility reports, ONS and census UK specific data can be accessed in GitHub  \url{https://bit.ly/2KNP06w}}.
+
+\begin{equation}
+M = H_{mob}C^{h} + W_{mob}C^{w} + S_{mob}C^{s} + R_{mob}C^{r}
+\end{equation}
+
+where $H, W, S, R \quad {mob}$ are the mobility factors of home, work, school and other. The mobility factor matrices can be temporal, as a function of time similar to the ODEs or fixed. For the latter, we can use an average value of mobility reduction from the mobility reports. It is recommended though, because population movement restrictions could play a very significant role for the spread or not of the decease to utilise a temporal format. For instance, the mobility factor of $H$ will have the approximate form:
+
+\begin{equation*}
+H=
+\begin{pmatrix}
+0.3 & 0 & \dots & 0\\
+0 & 0.3 &  & 0\\
+\vdots &  &  & \vdots  \\
+0 &  0 & \dots & 0.3
+\end{pmatrix}
+\end{equation*}
 
 
 

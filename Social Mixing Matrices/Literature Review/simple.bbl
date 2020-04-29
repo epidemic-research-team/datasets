@@ -1,4 +1,4 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
 
 \bibitem{Baguelin:2013}
 M.~Baguelin, S.~Flasche, A.~Camacho, N.~Demiris, E.~Miller, and W.~J. Edmunds.
@@ -55,5 +55,11 @@ J.~Mossong, N.~Hens, M.~Jit, P.~Beutels, K.~Auranen, R.~Mikolajczyk,
 \newblock Social contacts and mixing patterns relevant to the spread of
   infectious diseases.
 \newblock {\em PLOS Medicine}, 5(3):1--1, 2008.
+
+\bibitem{Kiesha:2017}
+K.~Prem, A.~R. Cook, and M.~Jit.
+\newblock Projecting social contact matrices in 152 countries using contact
+  surveys and demographic data.
+\newblock {\em PLOS Computational Biology}, 13:1--21, 09 2017.
 
 \end{thebibliography}
