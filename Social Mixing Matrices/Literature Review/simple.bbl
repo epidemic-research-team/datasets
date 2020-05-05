@@ -18,6 +18,10 @@ L.~Fumanelli, M.~Ajelli, P.~Manfredi, A.~Vespignani, and S.~Merler.
   the analysis of infectious diseases spread.
 \newblock {\em PLOS Computational Biology}, 8(9):1--10, 09 2012.
 
+\bibitem{Jones:2007}
+H.~J. Jones.
+\newblock Notes on $\mathcal{R}_{0}$, 2007.
+
 \bibitem{keeling2008modeling}
 M.~Keeling, P.~Rohani, and P.~U. Press.
 \newblock {\em Modeling Infectious Diseases in Humans and Animals}.

@@ -17,7 +17,7 @@
 
 Standard epidemic models, such as SIR, SIS and their extensions  SIRS, MSEIRS, SEIR are well established mathematical methods that simulate the spread of an infectious decease \cite{keeling2008modeling, ma2009mathematical, li2018introduction}. One limitation of these models is that they base their prediction on the a-priori assumption that the rate of contact in a population is constant across environments and age groups. As a result, these methods neglect the vital component of how populations interact. Therefore, researchers who solely rely on the SIR/SIS family of models often formulate contact rates ($\sigma$) and reproduction numbers ($\mathcal{R}_{0} $) based on assumptions and non-data driven hypotheses. As a reminder, $\mathcal{R}_{0} $ is the "\textit{basic reproduction number $\mathcal{R}_{0}$, which is defined as the average number of secondary infections produced when one infected individual is introduced into a host population where everyone is susceptible}" \cite[p.21]{ma2009mathematical}. In general, $\mathcal{R}_{0} >\sigma$ but in many models $\mathcal{R}_{0} =\sigma$. 
 
-Social Mixing Matrices (SMMs) are considered important tools for formulating realistic $\mathcal{R_{0}}$ and $\sigma$. SMMs capture social distancing patterns based on direct observations and surveys and as a result they provide crucial information to both scientists and public officials on how a directly transmitted infectious decease is spreading. Because of the granularity of the data that SMMs offer, their use has the potential to increase model robustness and prediction accuracy compared to models that rely solely on indirect data \cite{Mossong:2008, Baguelin:2013}. 
+Social Mixing Matrices (SMMs) are considered important tools for formulating realistic $\mathcal{R}_{0}$ and $\sigma$. SMMs capture social distancing patterns based on direct observations and surveys and as a result they provide crucial information to both scientists and public officials on how a directly transmitted infectious decease is spreading. Because of the granularity of the data that SMMs offer, their use has the potential to increase model robustness and prediction accuracy compared to models that rely solely on indirect data \cite{Mossong:2008, Baguelin:2013}. 
 
 \section{Literature Review}
 
@@ -37,6 +37,38 @@ Other papers that have evaluated and expanded the POLYMOD survey using statistic
 
 \section{Computation of $\mathcal{R}_{0}$ from NGM}
 \label{sec:2}
+
+Before we delve into the work of \cite{Diekmann:2010} and how to derive the $\mathcal{R}_{0}$ using the NGM, we should first briefly discuss what is the $\mathcal{R}_{0}$. For readers new to epidemiology, there often is a mistaken notion that $\mathcal{R}_{0}$ is an infection rate, or the rate of spread of a disease. This is incorrect, the $\mathcal{R}_{0}$ is a dimensionless number (scalar) that as we explained in the beginning of the text, it shows the \textbf{average} number of spread amongst the population \cite{ma2009mathematical, Jones:2007}. Overall, as \cite{Jones:2007} explains 
+
+\begin{equation*}
+\mathcal{R}_{0}= \bigg(\frac{\mbox{ infection}}{\mbox{ contact}}\bigg) \bigg(\frac{\mbox{ contact}}{\mbox{ time}}\bigg) \bigg(\frac{\mbox{ time}}{\mbox{ infection}}\bigg) 
+\end{equation*}
+
+alternatively
+
+\begin{equation}
+\mathcal{R}_{0}= \tau \bar{c} d
+\label{eq:10}
+\end{equation}
+
+with $\tau$ is the probability of transmission during a contact, $\bar{c}$ is the \textbf{average} rate of contact between individuals and $d$ is the duration of the infectiousness \cite[p.1]{Jones:2007}. Mapping these to a simple SIR model
+
+\begin{align*}
+\dot{S} & =  - \beta \frac{SI}{N} \\
+\dot{I}  & =  \beta \frac{SI}{N} - \gamma I  \\
+\dot{R}  & =  \gamma I 
+\end{align*}
+
+$\beta=\tau \bar{c}$, the effective contact rate (force of infection) equals the product of probability of transmission with the average rate of contacts between the population groups.  Also, $d=\gamma^{-1}$, the duration of the infectiousness is the inverse removal rate. Therefore, for an epidemic to spread intuitively needs the infection rate to be $I>0$
+
+\begin{align*}
+\beta \frac{SI}{N} - \gamma I  & >  0 \\
+\beta \frac{SI}{N}  & >  \gamma I  \\
+\mathcal{R}_{0} =  \frac{\beta}{\gamma } & >  0 
+\end{align*}
+
+Overall, what we are trying to achieve by calculating the $\mathcal{R}_{0} $ is to create a value that summarises the number of newly infected by averaging the number new infections over all possible infected types \cite[p.3]{Jones:2007}. For complex systems (SEIR) a way to compute this number is by utilising matrix algebra. As \cite{Diekmann:2010} to find the average value we can use the spectral radius (dominant eigenvalue) of the NGM, which is similar to the geometric mean. 
+
 
 \subsection{Next Generation Matrices: SEIR}
 \label{sub:2.1}
@@ -60,7 +92,7 @@ Let $\dot{x} = (E_{1}, E_{2}, I)^{T}$, and we want to decompose the system to ha
 
 where matrix $T$ corresponds to transmissions and matrix $\Sigma$ to transitions. 
 
-According to \cite{Diekmann:2010}, the role of $T$ and $\Sigma$ is similar to the sufficient statistics, as all information that is required is included in the decomposition. For the transition matrix $T$, we create a matrix with infected states, using indices $i, j\in {1, 2, 3}$ and the record $T_{ij}$ is the rate of infection term; individuals from state $j$ infects individuals in $i$. If the element in $T_{ij}$ is 0, then there is no chance of transmission.  Therefore, 
+According to \cite{Diekmann:2010}, the role of $T$ and $\Sigma$ is similar to the sufficient statistics, as all information that is required is included in the decomposition. For the transmission matrix $T$, we create a matrix with infected states, using indices $i, j\in {1, 2, 3}$ and the record $T_{ij}$ is the rate of infection term; individuals from state $j$ infects individuals in $i$. If the element in $T_{ij}$ is 0, then there is no chance of transmission.  Therefore, 
 
 \begin{equation*}
 T=
@@ -99,7 +131,7 @@ K_{L} = -T\Sigma^{-1} =
 \end{pmatrix}
 \end{equation*}
 
-the dominant eigenvalue of this matrix $K_{L}$ is the $\mathcal{R_{0}}$
+the dominant eigenvalue of this matrix $K_{L}$ is the $\mathcal{R}_{0}$
 
 \begin{equation}
 \mathcal{R}_{0} = \bigg( \frac{\rho \nu_{1}}{\nu_{1} + \mu} + \frac{(1-\rho) \nu_{2}}{\nu_{2} + \mu}  \bigg) \frac{\beta}{(\gamma + \mu)}
@@ -118,6 +150,8 @@ with $E$ being a matrix that its columns contain unit vectors the non-zero rows 
 \label{eq:8}
 \end{equation}
 
+The above case can be expanded for two groupings of individuals (male and female).
+
 \subsection{Next Generation Matrices: BBC Pandemic Survey}
 \label{sub:2.2}
 
@@ -127,7 +161,7 @@ The NGM of \cite{Diekmann:2010} can be linked with \cite{Klepac2020} matrix $C$ 
 NGM  = \frac{\mathcal{R}_{0}}{\rho(C)} C
 \end{equation}
 
-Analogous to the \ref{eq:8}, the $\rho(C)$ is the largest eigenvalue of $C$. As in PCA, the eigenvector associated with $\rho(C)$ shows which age group dominates in the social interactions and explain more the overall data variance. Therefore, following \cite{Diekmann:2010} examples we find the NGM and we already have $\rho(C)$ and $C$ and we extract $\mathcal{R}_{0}$.
+Analogous to the Equation \ref{eq:8}, the $\rho(C)$ is the largest eigenvalue of $C$. As in PCA, the eigenvector associated with $\rho(C)$ shows which age group dominates in the social interactions and explain more the overall data variance. Therefore, following \cite{Diekmann:2010} examples we find the NGM and we already have $\rho(C)$ and $C$ and we extract $\mathcal{R}_{0}$.
 
 \begin{equation}
 \mathcal{R}_{0} = NGM \times C \rho(C)^{-1}
@@ -142,7 +176,7 @@ We saw in sub-Section \ref{sub:2.1} how to use \cite{Diekmann:2010} method to co
 The equations of the SIR model are
 
 \begin{align*}
-\dot{S} & =  \mu N - \beta M\frac{SI}{N} + \mu S\\
+\dot{S} & =  \mu N - \beta M\frac{SI}{N} - \mu S\\
 \dot{I}  & =  \beta M\frac{SI}{N} - (\gamma + \mu) I  \\
 \dot{R}  & =  \gamma I - \mu R
 \end{align*}
@@ -183,13 +217,17 @@ the stochastic compartmental system has in total 5 states, $T_{total \quad popul
 
 Following \cite{Fumanelli:2012, Baguelin:2013, Klepac2020}, we will expand \cite{Gareth:2013} by including in our research a social mixing matrix (POLYMOD or BBC Pandemic) to infer the $mathcal{R}_{0}$ and also we will consider the level of intervation and the impact it has on the social mixing patterns \cite{Kiesha:2017}. The current paper from \cite{Gareth:2013} is using a sexual transmission matrix with dimensions ($2 \times 4 \times 4 \times 9 \times 9$) for $g=1|males$ and $g=2|females$, four sexual activity groups $(s\in {1, \dots ,4})$ and a 9-bracket age group. In this initial stage of the model we will simplify the social distancing matrix by using only the age group as dimensions, we will move into more complex applications later.
 
-The first step is to construct the NGM matrix \cite{Diekmann:2010} by using the survey data. In this example we will construct the NGM based on the BBC Pandemic data but following \cite{Fumanelli:2012} approach for the SIR model. From \cite{Klepac2020}, we compute the contact matrix $M$ as a linear combination of age-specific contacts by context (home $h$, work $w$, school $s$, other $r$) and type (conversational $Co$ or physical $Ph$) using the \textit{population contact matrices} $C$. We also adjust the population contact matrices by a factor, based on temporal data collected from Google AI and Apple mobility reports \footnote{All data, including COVID, social distancing matrices, mobility reports, ONS and census UK specific data can be accessed in GitHub  \url{https://bit.ly/2KNP06w}}.
+The first step is to construct the NGM matrix \cite{Diekmann:2010} by using the survey data. In this example we will construct the NGM based on the BBC Pandemic data but following \cite{Fumanelli:2012} approach for the SIR model. 
+
+
+
+From \cite{Klepac2020}, we compute the contact matrix $M$ as a linear combination of age-specific contacts by context (home $h$, work $w$, school $s$, other $r$) and type (conversational $Co$ or physical $Ph$) using the \textit{population contact matrices} $C$. We also adjust the population contact matrices by a factor, based on temporal data collected from Google AI and Apple mobility reports \footnote{All data, including COVID, social distancing matrices, mobility reports, ONS and census UK specific data can be accessed in GitHub  \url{https://bit.ly/2KNP06w}}.
 
 \begin{equation}
 M = H_{mob}C^{h} + W_{mob}C^{w} + S_{mob}C^{s} + R_{mob}C^{r}
 \end{equation}
 
-where $H, W, S, R \quad {mob}$ are the mobility factors of home, work, school and other. The mobility factor matrices can be temporal, as a function of time similar to the ODEs or fixed. For the latter, we can use an average value of mobility reduction from the mobility reports. It is recommended though, because population movement restrictions could play a very significant role for the spread or not of the decease to utilise a temporal format. For instance, the mobility factor of $H$ will have the approximate form:
+where $H_{mob}, W_{mob}, S_{mob}, R_{mob}$ are the mobility factors of home, work, school and other. The mobility factor matrices can be temporal, as a function of time similar to the ODEs or fixed. For the latter, we can use an average value of mobility reduction from the mobility reports. It is recommended though, because population movement restrictions could play a very significant role for the spread or not of the decease to utilise a temporal format. For instance, the mobility factor of $H$ will have the approximate form:
 
 \begin{equation*}
 H=
@@ -201,7 +239,19 @@ H=
 \end{pmatrix}
 \end{equation*}
 
+From \cite[p.9]{Gareth:2013}, we know the force of infection (effective contact rate) is
 
+\begin{equation}
+\lambda_{g,s,a}=\beta_{g}\sum_{s^{'}, \alpha^{'}} \bigg\{ c^{*}_{g,s,s^{'},\alpha,\alpha^{'}} \rho^{*}_{g,s,s^{'},\alpha,\alpha^{'}} \frac{I_{g^{'}, s^{'}, \alpha{'}}}{S_{g^{'}, s^{'}, \alpha{'}} + I_{g^{'}, s^{'}, \alpha{'}} + G_{g^{'}, s^{'}, \alpha{'}} + P_{g^{'}, s^{'}, \alpha{'}} + N_{g^{'}, s^{'}, \alpha{'}} } \bigg\}
+\label{eq:11}
+\end{equation}
+
+From Equation \ref{eq:11}, we drop the $\rho^{*}_{g,s,s^{'},\alpha,\alpha^{'}}$ conditional probability of contact between sexual partners. Instead, we assume a uniform distribution amongst age groups to contact and transmit the disease. We can add this parameter on a later stage if needed and we think that specific age groups $j$ have more probability of transmitting the decease when contacting age groups $i$. In the next formula we replace the contact rate $c$ with the social mixing matrix that we constructed $M$
+
+\begin{equation}
+\lambda_{a}=\beta_{g}\sum_{s^{'}, \alpha^{'}} \bigg\{ M_{a} \frac{I_{g^{'}, s^{'}, \alpha{'}}}{S_{g^{'}, s^{'}, \alpha{'}} + I_{g^{'}, s^{'}, \alpha{'}} + G_{g^{'}, s^{'}, \alpha{'}} + P_{g^{'}, s^{'}, \alpha{'}} + N_{g^{'}, s^{'}, \alpha{'}} } \bigg\}
+\label{eq:11}
+\end{equation}
 
 \bibliographystyle{abbrv}
 \bibliography{simple}
